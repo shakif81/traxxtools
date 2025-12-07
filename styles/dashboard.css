@@ -1,0 +1,158 @@
+/* ===== ESTILOS PARA ESTADOS ===== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    border: 1px solid var(--gray-200);
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
+.stat-card i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.stat-card.disponible i {
+    color: var(--success);
+}
+
+.stat-card.en-uso i {
+    color: var(--warning);
+}
+
+.stat-card.mantenimiento i {
+    color: var(--danger);
+}
+
+.stat-card.en-cola i {
+    color: var(--gray-600);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 10px 0;
+    color: var(--primary);
+}
+
+.stat-label {
+    color: var(--gray-600);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* ==== ESTILOS PARA ESTACIONES ==== */
+.stations-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.station-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    border: 1px solid var(--gray-200);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.station-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
+.stats-separator {
+    grid-column: 1 / -1;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+    margin: 2rem 0;
+}
+
+.station-card.estacion-0 i {
+    color: var(--success);
+}
+
+.station-card.estacion-1 i {
+    color: var(--secondary);
+}
+
+.station-card.estacion-2 i {
+    color: var(--warning);
+}
+
+.station-card.estacion-3 i {
+    color: var(--accent);
+}
+
+.station-card.estacion-4 i {
+    color: var(--danger);
+}
+
+.station-card.estacion-5 i {
+    color: var(--gray-600);
+}
+
+.station-card i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.station-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 10px 0;
+    color: var(--primary);
+}
+
+.station-label {
+    color: var(--gray-600);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.station-tools {
+    background: var(--gray-50);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    text-align: left;
+}
+
+.herramienta-in-station {
+    background-color: white;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-left: 3px solid var(--secondary);
+}
+
+.herramienta-in-station:last-child {
+    margin-bottom: 0;
+}

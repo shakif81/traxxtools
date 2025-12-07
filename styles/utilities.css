@@ -1,0 +1,186 @@
+/* ===== UTILITIES ===== */
+
+/* Estilos para tabla de herramientas (mantenidos para compatibilidad) */
+.tools-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.tools-table th:nth-child(1),
+.tools-table td:nth-child(1) { width: 25%; }
+
+.tools-table th:nth-child(2),
+.tools-table td:nth-child(2) { width: 15%; }
+
+.tools-table th:nth-child(3),
+.tools-table td:nth-child(3) { width: 12%; }
+
+.tools-table th:nth-child(4),
+.tools-table td:nth-child(4) { width: 15%; }
+
+.tools-table th:nth-child(5),
+.tools-table td:nth-child(5) { width: 15%; }
+
+.tools-table th:nth-child(6),
+.tools-table td:nth-child(6) { width: 18%; }
+
+.tools-table th {
+    background: var(--gray-50);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--gray-700);
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--gray-200);
+    white-space: nowrap;
+    text-align: left;
+}
+
+.tools-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.tools-table tr:last-child td {
+    border-bottom: none;
+}
+
+.tools-table tr:hover {
+    background: var(--gray-50);
+}
+
+/* Tool info */
+.tool-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tool-icon-table {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-600);
+}
+
+.tool-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.tool-name {
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.tool-status {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.status-available {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.status-in-use {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.status-maintenance {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.user-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-avatar-small {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.btn-icon-primary {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-icon-primary:hover {
+    background: var(--primary);
+    transform: scale(1.05);
+}
+
+.btn-icon-outline {
+    background: transparent;
+    color: var(--gray-600);
+    border: 1px solid var(--gray-300);
+}
+
+.btn-icon-outline:hover {
+    background: var(--gray-50);
+    border-color: var(--gray-400);
+}
+
+.btn-icon-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-icon-success:hover {
+    background: #0da271;
+    transform: scale(1.05);
+}
+
+.btn-icon-warning {
+    background: var(--warning);
+    color: white;
+}
+
+.btn-icon-warning:hover {
+    background: #e67e22;
+    transform: scale(1.05);
+}
