@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Control | Línea TRAXX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/herramientas.css">
+    <link rel="stylesheet" href="styles/materiales.css">
+    <link rel="stylesheet" href="styles/modales.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    <link rel="stylesheet" href="styles/utilities.css">
+</head>
+<body>
+    <!-- Overlay para el menú móvil -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    
+    <!-- Navegación móvil inferior -->
+    <div class="mobile-bottom-nav" id="mobile-bottom-nav">
+        <button class="nav-item-mobile active" data-page="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+        </button>
+        <button class="nav-item-mobile" data-page="herramientas">
+            <i class="fas fa-tools"></i>
+            <span>Herramientas</span>
+        </button>
+        <button class="nav-item-mobile" data-page="en-espera">
+            <i class="fas fa-users"></i>
+            <span>En Espera</span>
+        </button>
+    </div>
+    
+    <div class="app-container" id="app-container">
+        <!-- Header -->
+        <header class="header">
+            <button class="menu-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">
+                <h1>Sistema de Control</h1>
+            </div>
+            <div class="header-actions">
+                <div class="user-profile" id="user-profile-logout-btn">
+                    <div class="user-avatar" id="user-avatar">OP</div>
+                    <div class="user-info">
+                        <span class="user-name" id="user-name">Operario General</span>
+                        <span class="user-role" id="user-role">Taller TRAXX</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>
+                    <div class="logo-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    TRAXX Tools
+                </h2>
+            </div>
+            <div class="nav-menu">
+                <a class="nav-item active" data-page="dashboard" href="#">
+                    <i class="fas fa-home nav-icon"></i> Dashboard
+                </a>
+                <a class="nav-item" data-page="herramientas" href="#">
+                    <i class="fas fa-tools nav-icon"></i> Herramientas
+                </a>
+                <a class="nav-item" data-page="materiales" href="#">
+                    <i class="fas fa-flask nav-icon"></i> Materiales
+                </a>
+                <a class="nav-item" data-page="en-espera" href="#">
+                    <i class="fas fa-users nav-icon"></i> En Espera
+                </a>
+                <a class="nav-item" data-page="historial" href="#">
+                    <i class="fas fa-history nav-icon"></i> Historial
+                </a>
+                <a class="nav-item" data-page="reportes" href="#">
+                    <i class="fas fa-chart-bar nav-icon"></i> Reportes
+                </a>
+            </div>
+            <div class="system-status">
+                <div class="status-item">
+                    <span class="status-label">Estado del Sistema</span>
+                    <span class="status-value status-online">Operativo</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Última Actualización</span>
+                    <span class="status-value" id="sidebar-update-time">Cargando...</span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Página Dashboard -->
+            <div class="page-section active" id="dashboard">
+                <div class="content-header">
+                    <div>
+                        <h1 class="page-title">Dashboard</h1>
+                        <p class="page-subtitle">Control de herramientas en tiempo real</p>
+                    </div>
+                    <div class="last-update" id="last-update">
+                        Última actualización: <span id="update-time">Cargando...</span>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="stat-card disponible">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-value" id="disponible-count">0</div>
+                        <div class="stat-label">Disponibles</div>
+                    </div>
+                    <div class="stat-card en-uso">
+                        <i class="fas fa-user-check"></i>
+                        <div class="stat-value" id="en-uso-count">0</div>
+                        <div class="stat-label">En Uso</div>
+                    </div>
+                    <div class="stat-card mantenimiento">
+                        <i class="fas fa-toolbox"></i>
+                        <div class="stat-value" id="mantenimiento-count">0</div>
+                        <div class="stat-label">Mantenimiento</div>
+                    </div>
+                    <div class="stat-card en-cola">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-value" id="en-cola-count">0</div>
+                        <div class="stat-label">En Cola</div>
+                    </div>
+                </div>
+                <div class="stats-separator"></div>
+                <div class="stations-stats" id="stations">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Cargando estaciones...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Página Herramientas -->
+            <div class="page-section" id="herramientas">
+                <div class="content-header">
+                    <div>
+                        <h1 class="page-title">Herramientas</h1>
+                        <p class="page-subtitle">Herramientas disponibles, en uso y en mantenimiento</p>
+                    </div>
+                    <div class="last-update" id="herramientas-update-time">
+                        Última actualización:<span id="herramientas-update">Cargando...</span>
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card disponible">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-value" id="herramientas-disponible-count">0</div>
+                        <div class="stat-label">Disponibles</div>
+                    </div>
+                    <div class="stat-card en-uso">
+                        <i class="fas fa-user-check"></i>
+                        <div class="stat-value" id="herramientas-en-uso-count">0</div>
+                        <div class="stat-label">En Uso</div>
+                    </div>
+                    <div class="stat-card mantenimiento">
+                        <i class="fas fa-toolbox"></i>
+                        <div class="stat-value" id="herramientas-mantenimiento-count">0</div>
+                        <div class="stat-label">Mantenimiento</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tools"></i>
+                        <div class="stat-value" id="herramientas-total-count">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+                
+                <!-- Barra de búsqueda -->
+                <div class="tools-section" style="margin-bottom: 1.5rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-tools"></i> Inventario de Herramientas
+                        </h2>
+                        <div class="section-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search search-icon"></i>
+                                <input id="herramientas-search-tool" placeholder="Buscar herramienta..." type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenedor de tarjetas -->
+                <div class="tools-cards-container" id="tools-cards-container">
+                    <div class="loading-cards" style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--secondary);"></i>
+                        <p style="margin-top: 1rem; color: var(--gray-600);">Cargando herramientas...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Página Materiales -->
+            <div class="page-section" id="materiales">
+                <div class="content-header">
+                    <div>
+                        <h1 class="page-title">Materiales</h1>
+                        <p class="page-subtitle">Materiales disponibles y en uso</p>
+                    </div>
+                    <div class="last-update" id="materiales-update-time">
+                        Última actualización: <span id="materiales-update">Cargando...</span>
+                    </div>
+                </div>
+
+                <!-- Barra de búsqueda y filtros -->
+                <div class="tools-section" style="margin-bottom: 1.5rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-flask"></i> Inventario de Materiales
+                        </h2>
+                        <div class="section-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search search-icon"></i>
+                                <input id="materiales-search" placeholder="Buscar material..." type="text"/>
+                            </div>
+                            <button class="btn btn-primary" id="add-material-btn" style="display:none;">
+                                <i class="fas fa-plus"></i> Añadir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenedor de tarjetas -->
+                <div class="materials-cards-container" id="materials-cards-container">
+                    <div class="loading-cards" style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--secondary);"></i>
+                        <p style="margin-top: 1rem; color: var(--gray-600);">Cargando materiales...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Página En Espera -->
+            <div class="page-section" id="en-espera">
+                <div class="content-header">
+                    <div>
+                        <h1 class="page-title">En Espera</h1>
+                        <p class="page-subtitle">Gestión de En Espera y colas</p>
+                    </div>
+                    <div class="last-update" id="en-espera-update-time">
+                        Última actualización: <span id="en-espera-update">Cargando...</span>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h2><i class="fas fa-users"></i> Sistema de Espera</h2>
+                    <div class="turn-controls">
+                        <div class="waiting-queue">
+                            <h4><i class="fas fa-list-ol"></i> En Espera</h4>
+                            <div id="waiting-list">
+                                <div class="queue-item">
+                                    <div class="queue-info">
+                                        <div>No hay operarios en espera</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tools-in-use">
+                            <h4><i class="fas fa-tools"></i> En Uso Actualmente</h4>
+                            <div id="operarios-current-usage">
+                                <div class="current-usage-item">
+                                    <div>No hay herramientas en uso</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Página Historial -->
+            <div class="page-section" id="historial">
+                <div class="content-header">
+                    <h1 class="page-title">Historial</h1>
+                    <p class="page-subtitle">Registro completo de movimientos</p>
+                </div>
+                <div class="panel">
+                    <h2><i class="fas fa-history"></i> Historial Completo</h2>
+                    <div class="history-table-container">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Operario</th>
+                                    <th>Fecha/Hora</th>
+                                    <th>Herramienta</th>
+                                    <th>Serie</th>
+                                    <th>Operación</th>
+                                    <th>Acción</th>
+                                    <th>Estación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 2rem;">
+                                        <div class="loading">
+                                            <i class="fas fa-spinner fa-spin"></i> Cargando historial...
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Página Reportes -->
+            <div class="page-section" id="reportes">
+                <div class="content-header">
+                    <h1 class="page-title">Reportes y Estadísticas</h1>
+                    <p class="page-subtitle">Informes de uso y mantenimiento</p>
+                </div>
+                <div class="panel" style="text-align: center; padding: 4rem;">
+                    <h2><i class="fas fa-chart-bar"></i> Sección en desarrollo</h2>
+                    <p>Informes de uso y promedios de tiempo.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+    
+    <!-- Scripts -->
+    <script src="firebase.js"></script>
+    <script src="app.js"></script>
+    <script src="modules/auth.js"></script>
+    <script src="modules/tools.js"></script>
+    <script src="modules/materials.js"></script>
+    <script src="modules/stations.js"></script>
+    <script src="modules/queue.js"></script>
+    <script src="modules/ui.js"></script>
+    <script src="utils/notifications.js"></script>
+    <script src="utils/modal.js"></script>
+    <script src="utils/helpers.js"></script>
+    
+    <!-- Inicialización -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.tallerSystem = new TallerSystem();
+        });
+    </script>
+</body>
+</html>
